@@ -1,6 +1,6 @@
 # board will be a class, along with X's and O's
 class GameBoard
-  attr_accessor :board_hash
+  attr_accessor :board_hash, :game_over
 
   def initialize
     @board_hash = {
@@ -10,6 +10,7 @@ class GameBoard
       '7' => { symbol: '7', played: false }, '8' => { symbol: '8', played: false },
       '9' => { symbol: '9', played: false }
     }
+    @game_over = false
     print_game_board
   end
 
@@ -44,17 +45,22 @@ class Player
     gameboard.board_hash[location][:played] = true
     true
   end
+
+  def play_round(gameboard)
+    gameboard.print_game_board
+    puts "Please select where you'd like to place your symbol."
+    location = gets.chomp
+    until place_symbol(location, gameboard)
+      puts "Please select an area that hasn't been taken."
+      gameboard.print_game_board
+      location = gets.chomp
+    end
+    gameboard.print_game_board
+  end
 end
 
 newgame = GameBoard.new
-keff = Player.new()
+keff = Player.new
 
-keff.place_symbol('2', newgame)
-
-newgame.print_game_board
-
-keff.place_symbol('2', newgame)
-
-keff.place_symbol('5', newgame)
-
-newgame.print_game_board
+keff.play_round(newgame)
+keff.play_round(newgame)
