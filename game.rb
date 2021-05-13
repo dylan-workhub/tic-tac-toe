@@ -25,13 +25,17 @@ class GameBoard
 
   def play_game(player1, player2)
     current_player = player1
-    until is_won?
+    until game_won?
       if current_player == player1
         player1.play_round(self)
         current_player = player2
       else
         player2.play_round(self)
         current_player = player1
+      end
+      if game_won?
+        puts "Congratulations! #{current_player} has won!"
+        next
       end
     end
   end
@@ -40,7 +44,7 @@ class GameBoard
 
   attr_writer :game_over
 
-  def is_won?
+  def game_won?
     if board_hash['1'][:symbol] == board_hash['2'][:symbol] && board_hash['1'][:symbol] == board_hash['3'][:symbol]
       true
     elsif board_hash['1'][:symbol] == board_hash['5'][:symbol] && board_hash['1'][:symbol] == board_hash['9'][:symbol]
@@ -59,6 +63,12 @@ class GameBoard
       true
     else
       false
+    end
+  end
+
+  def board_filled?
+    @board_hash.reduce(0) do |sum, (key, value)|
+      
     end
   end
 end
