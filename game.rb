@@ -26,16 +26,15 @@ class GameBoard
   def play_game(player1, player2)
     current_player = player1
     until game_won?
+      current_player.play_round(self)
+      if game_won?
+        puts "Congratulations! #{current_player.name} has won!"
+        next
+      end
       if current_player == player1
-        player1.play_round(self)
         current_player = player2
       else
-        player2.play_round(self)
         current_player = player1
-      end
-      if game_won?
-        puts "Congratulations! #{current_player} has won!"
-        next
       end
     end
   end
@@ -75,9 +74,11 @@ end
 
 # class for all players
 class Player
-  attr_accessor :symbol
+  attr_accessor :symbol, :name
 
   def initialize
+    puts 'Please enter your name:'
+    name = gets.chomp
     puts "Please enter ONE CHARACTER that you'd like to use as your symbol."
     symbol = gets.chomp
     until symbol.length == 1
@@ -85,6 +86,7 @@ class Player
       symbol = gets.chomp
     end
     @symbol = symbol
+    @name = name
   end
 
   def place_symbol(location, gameboard)
@@ -106,7 +108,7 @@ class Player
 
   def play_round(gameboard)
     gameboard.print_game_board
-    puts "Please select where you'd like to place your symbol: #{symbol}."
+    puts "Please select where you'd like to place your symbol, #{self.name}: #{symbol}."
     location = gets.chomp
     until place_symbol(location, gameboard)
       puts "Please select an area that hasn't been taken/is between 1 and 9."
