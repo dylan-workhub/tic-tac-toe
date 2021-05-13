@@ -1,6 +1,6 @@
 # board will be a class, along with X's and O's
 class GameBoard
-  attr_accessor :board_hash, :game_over
+  attr_accessor :board_hash
 
   def initialize
     @board_hash = {
@@ -21,10 +21,25 @@ class GameBoard
     puts '---------'
     puts "#{@board_hash['7'][:symbol]} | #{@board_hash['8'][:symbol]} | #{@board_hash['9'][:symbol]}"
   end
+
+  def play_game(player1, player2)
+    current_player = player1
+    until @game_over == true
+      if current_player == player1
+        player1.play_round(self)
+        current_player = player2
+      else
+        player2.play_round(self)
+        current_player = player1
+      end
+    end
+  end
 end
 
 # class for all players
 class Player
+  attr_accessor :symbol
+
   def initialize
     puts "Please enter ONE CHARACTER that you'd like to use as your symbol."
     symbol = gets.chomp
@@ -48,7 +63,7 @@ class Player
 
   def play_round(gameboard)
     gameboard.print_game_board
-    puts "Please select where you'd like to place your symbol."
+    puts "Please select where you'd like to place your symbol: #{self.symbol}."
     location = gets.chomp
     until place_symbol(location, gameboard)
       puts "Please select an area that hasn't been taken."
@@ -60,7 +75,7 @@ class Player
 end
 
 newgame = GameBoard.new
-keff = Player.new
+player1 = Player.new
+player2 = Player.new
 
-keff.play_round(newgame)
-keff.play_round(newgame)
+newgame.play_game(player1, player2)
