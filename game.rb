@@ -28,17 +28,19 @@ class Player
     @symbol = symbol
   end
 
-  def select_location
-
-  end
-
   def place_symbol(location, gameboard)
+    if gameboard.board_hash[location][:played] == true
+      return false
+    end
+
     gameboard.board_hash[location][:symbol] = @symbol
     gameboard.board_hash[location][:played] = true
+    true
   end
 end
 
 newgame = GameBoard.new
 keff = Player.new('X')
 
+keff.place_symbol('2', newgame)
 keff.place_symbol('2', newgame)
