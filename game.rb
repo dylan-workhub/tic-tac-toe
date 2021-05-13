@@ -24,12 +24,19 @@ end
 
 # class for all players
 class Player
-  def initialize(symbol)
+  def initialize
+    puts "Please enter ONE CHARACTER that you'd like to use as your symbol."
+    symbol = gets.chomp
+    until symbol.length == 1
+      puts 'Please only enter one character.'
+      symbol = gets.chomp
+    end
     @symbol = symbol
   end
 
   def place_symbol(location, gameboard)
     if gameboard.board_hash[location][:played] == true
+      puts "#{location} has already been taken."
       return false
     end
 
@@ -40,7 +47,14 @@ class Player
 end
 
 newgame = GameBoard.new
-keff = Player.new('X')
+keff = Player.new()
 
 keff.place_symbol('2', newgame)
+
+newgame.print_game_board
+
 keff.place_symbol('2', newgame)
+
+keff.place_symbol('5', newgame)
+
+newgame.print_game_board
