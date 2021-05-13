@@ -1,6 +1,7 @@
 # board will be a class, along with X's and O's
 class GameBoard
   attr_accessor :board_hash
+  attr_reader :game_over
 
   def initialize
     @board_hash = {
@@ -24,7 +25,7 @@ class GameBoard
 
   def play_game(player1, player2)
     current_player = player1
-    until @game_over == true
+    until is_won?
       if current_player == player1
         player1.play_round(self)
         current_player = player2
@@ -32,6 +33,32 @@ class GameBoard
         player2.play_round(self)
         current_player = player1
       end
+    end
+  end
+
+  protected
+
+  attr_writer :game_over
+
+  def is_won?
+    if board_hash['1'][:symbol] == board_hash['2'][:symbol] && board_hash['1'][:symbol] == board_hash['3'][:symbol]
+      true
+    elsif board_hash['1'][:symbol] == board_hash['5'][:symbol] && board_hash['1'][:symbol] == board_hash['9'][:symbol]
+      true
+    elsif board_hash['1'][:symbol] == board_hash['4'][:symbol] && board_hash['1'][:symbol] == board_hash['7'][:symbol]
+      true
+    elsif board_hash['2'][:symbol] == board_hash['5'][:symbol] && board_hash['2'][:symbol] == board_hash['8'][:symbol]
+      true
+    elsif board_hash['3'][:symbol] == board_hash['6'][:symbol] && board_hash['3'][:symbol] == board_hash['9'][:symbol]
+      true
+    elsif board_hash['3'][:symbol] == board_hash['5'][:symbol] && board_hash['3'][:symbol] == board_hash['7'][:symbol]
+      true
+    elsif board_hash['4'][:symbol] == board_hash['5'][:symbol] && board_hash['4'][:symbol] == board_hash['6'][:symbol]
+      true
+    elsif board_hash['7'][:symbol] == board_hash['8'][:symbol] && board_hash['7'][:symbol] == board_hash['9'][:symbol]
+      true
+    else
+      false
     end
   end
 end
@@ -44,13 +71,19 @@ class Player
     puts "Please enter ONE CHARACTER that you'd like to use as your symbol."
     symbol = gets.chomp
     until symbol.length == 1
-      puts 'Please only enter one character.'
+      puts 'Please only enter one character between 1 and 9'
       symbol = gets.chomp
     end
     @symbol = symbol
   end
 
   def place_symbol(location, gameboard)
+    location = location.to_i.to_s
+    location_int = location.to_i
+    unless location_int <= 9 && location_int >= 1
+      puts "#{location} is not between 1 and 9."
+      return false
+    end
     if gameboard.board_hash[location][:played] == true
       puts "#{location} has already been taken."
       return false
@@ -63,10 +96,10 @@ class Player
 
   def play_round(gameboard)
     gameboard.print_game_board
-    puts "Please select where you'd like to place your symbol: #{self.symbol}."
+    puts "Please select where you'd like to place your symbol: #{symbol}."
     location = gets.chomp
     until place_symbol(location, gameboard)
-      puts "Please select an area that hasn't been taken."
+      puts "Please select an area that hasn't been taken/is between 1 and 9."
       gameboard.print_game_board
       location = gets.chomp
     end
