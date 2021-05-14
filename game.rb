@@ -29,9 +29,11 @@ class GameBoard
       current_player.play_round(self)
       if game_won?
         puts "Congratulations! #{current_player.name} has won!"
+        print_game_board
         next
       elsif board_filled?
         puts "It's a tie! All spaces have been filled."
+        print_game_board
         next
       end
       if current_player == player1
@@ -130,7 +132,6 @@ class Player
       gameboard.print_game_board
       location = gets.chomp
     end
-    gameboard.print_game_board
   end
 end
 
