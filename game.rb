@@ -25,10 +25,13 @@ class GameBoard
 
   def play_game(player1, player2)
     current_player = player1
-    until game_won?
+    until game_won? || board_filled?
       current_player.play_round(self)
       if game_won?
         puts "Congratulations! #{current_player.name} has won!"
+        next
+      elsif board_filled?
+        puts "It's a tie! All spaces have been filled."
         next
       end
       if current_player == player1
@@ -66,8 +69,17 @@ class GameBoard
   end
 
   def board_filled?
-    @board_hash.reduce(0) do |sum, (key, value)|
-      
+    board_state = @board_hash.reduce(0) do |sum, (key, value)|
+      if value[:symbol] != key
+        sum += 1
+      else
+        sum
+      end
+    end
+    if board_state == 9
+      return true
+    else
+      return false
     end
   end
 end
