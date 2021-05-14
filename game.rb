@@ -86,6 +86,8 @@ end
 
 # class for all players
 class Player
+  @@symbols_used = []
+
   attr_accessor :symbol, :name
 
   def initialize
@@ -93,12 +95,13 @@ class Player
     name = gets.chomp
     puts "Please enter ONE CHARACTER that you'd like to use as your symbol."
     symbol = gets.chomp
-    until symbol.length == 1
-      puts 'Please only enter one character between 1 and 9'
+    until symbol.length == 1 && symbol != @@symbols_used[0]
+      puts 'Please only enter one character between 1 and 9. Your symbol must also not be a symbol that has already been used.'
       symbol = gets.chomp
     end
     @symbol = symbol
     @name = name
+    @@symbols_used << @symbol
   end
 
   def place_symbol(location, gameboard)
