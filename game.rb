@@ -25,18 +25,13 @@ class GameBoard
 
   def play_game(player1, player2)
     @current_player = player1
-    until game_won? || board_filled?
+    until game_over?
       @current_player.play_round(self)
-      if game_won?
-        puts "Congratulations! #{current_player.name} has won!"
-        print_game_board
-        next
-      elsif board_filled?
-        puts "It's a tie! All spaces have been filled."
+      if game_over?
         print_game_board
         next
       end
-      current_player = switch_player(player1, player2)
+      switch_player(player1, player2)
     end
     play_again?(player1, player2)
   end
@@ -54,6 +49,18 @@ class GameBoard
   protected
 
   attr_writer :game_over
+
+  def game_over?
+    if game_won?
+      puts "Congratulations! #{@current_player.name} has won!"
+      return true
+    elsif board_filled?
+      puts "It's a tie! All spaces have been filled."
+      return true
+    else
+      return false
+    end
+  end
 
   def game_won?
     if board_hash['1'][:symbol] == board_hash['2'][:symbol] && board_hash['1'][:symbol] == board_hash['3'][:symbol]
