@@ -1,6 +1,6 @@
 # board will be a class, along with X's and O's
 class GameBoard
-  attr_accessor :board_hash
+  attr_accessor :board_hash, :current_player
   attr_reader :game_over
 
   def initialize
@@ -12,7 +12,7 @@ class GameBoard
       '9' => { symbol: '9', played: false }
     }
     @game_over = false
-    print_game_board
+    @current_player = nil
   end
 
   def print_game_board
@@ -24,9 +24,9 @@ class GameBoard
   end
 
   def play_game(player1, player2)
-    current_player = player1
+    @current_player = player1
     until game_won? || board_filled?
-      current_player.play_round(self)
+      @current_player.play_round(self)
       if game_won?
         puts "Congratulations! #{current_player.name} has won!"
         print_game_board
@@ -36,12 +36,19 @@ class GameBoard
         print_game_board
         next
       end
-      if current_player == player1
-        current_player = player2
-      else
-        current_player = player1
-      end
+      current_player = switch_player(player1, player2)
     end
+    play_again?(player1, player2)
+  end
+
+  def play_again?(player1, player2)
+    puts 'Would you like to play again? (Y/N)'
+    user_response = gets.chomp.upcase
+    until user_response == 'Y' || user_response == 'N'
+      puts 'Please enter Y or N.'
+      user_response = gets.chomp.upcase
+    end
+    user_response == 'Y'
   end
 
   protected
@@ -78,10 +85,24 @@ class GameBoard
         sum
       end
     end
-    if board_state >= 9
-      return true
+    board_state >= 9
+  end
+
+  def board_reset
+    @board_hash = {
+      '1' => { symbol: '1', played: false }, '2' => { symbol: '2', played: false },
+      '3' => { symbol: '3', played: false }, '4' => { symbol: '4', played: false },
+      '5' => { symbol: '5', played: false }, '6' => { symbol: '6', played: false },
+      '7' => { symbol: '7', played: false }, '8' => { symbol: '8', played: false },
+      '9' => { symbol: '9', played: false }
+    }
+  end
+
+  def switch_player(player1, player2)
+    if @current_player == player1
+      @current_player = player2
     else
-      return false
+      @current_player = player1
     end
   end
 end
