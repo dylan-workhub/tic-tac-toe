@@ -109,17 +109,26 @@ class Player
 
   def initialize
     @@num_of_players += 1
+    name = retrieve_name
+    @name = name
+    symbol = retrieve_symbol
+    @symbol = symbol
+    @@symbols_used << @symbol
+  end
+
+  def retrieve_name
     puts "Player #{@@num_of_players}, please enter your name:"
-    name = gets.chomp
-    puts "#{name}, please enter ONE CHARACTER that you'd like to use as your symbol:"
+    gets.chomp
+  end
+
+  def retrieve_symbol
+    puts "#{@name}, please enter ONE CHARACTER that you'd like to use as your symbol:"
     symbol = gets.chomp
     until symbol.length == 1 && symbol != @@symbols_used[0]
       puts 'Please only enter one character between 1 and 9. Your symbol must also not be a symbol that has already been used.'
       symbol = gets.chomp
     end
-    @symbol = symbol
-    @name = name
-    @@symbols_used << @symbol
+    symbol
   end
 
   def place_symbol(location, gameboard)
