@@ -1,7 +1,7 @@
 # board will be a class, along with X's and O's
 class GameBoard
   attr_accessor :board_hash, :current_player
-  attr_reader :game_over
+  attr_reader :game_over, :win_conditions
 
   def initialize
     @board_hash = {
@@ -13,6 +13,7 @@ class GameBoard
     }
     @game_over = false
     @current_player = nil
+    @win_conditions = [['1', '2', '3'], ['1', '5', '9'], ['1', '4', '7'], ['2', '5', '8'], ['3', '6', '9'], ['3', '5', '7'], ['4', '5', '6'], ['7', '8', '9']]
   end
 
   def print_game_board
@@ -53,34 +54,19 @@ class GameBoard
   def game_over?
     if game_won?
       puts "Congratulations! #{@current_player.name} has won!"
-      return true
+      true
     elsif board_filled?
       puts "It's a tie! All spaces have been filled."
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
   def game_won?
-    if board_hash['1'][:symbol] == board_hash['2'][:symbol] && board_hash['1'][:symbol] == board_hash['3'][:symbol]
-      true
-    elsif board_hash['1'][:symbol] == board_hash['5'][:symbol] && board_hash['1'][:symbol] == board_hash['9'][:symbol]
-      true
-    elsif board_hash['1'][:symbol] == board_hash['4'][:symbol] && board_hash['1'][:symbol] == board_hash['7'][:symbol]
-      true
-    elsif board_hash['2'][:symbol] == board_hash['5'][:symbol] && board_hash['2'][:symbol] == board_hash['8'][:symbol]
-      true
-    elsif board_hash['3'][:symbol] == board_hash['6'][:symbol] && board_hash['3'][:symbol] == board_hash['9'][:symbol]
-      true
-    elsif board_hash['3'][:symbol] == board_hash['5'][:symbol] && board_hash['3'][:symbol] == board_hash['7'][:symbol]
-      true
-    elsif board_hash['4'][:symbol] == board_hash['5'][:symbol] && board_hash['4'][:symbol] == board_hash['6'][:symbol]
-      true
-    elsif board_hash['7'][:symbol] == board_hash['8'][:symbol] && board_hash['7'][:symbol] == board_hash['9'][:symbol]
-      true
-    else
-      false
+    @win_conditions.any? do |win_condition|
+      checker = win_condition[0]
+      win_condition.all? { |space| @board_hash[space][:symbol] == @board_hash[checker][:symbol] }
     end
   end
 
