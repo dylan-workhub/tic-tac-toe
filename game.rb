@@ -44,7 +44,12 @@ class GameBoard
       puts 'Please enter Y or N.'
       user_response = gets.chomp.upcase
     end
-    user_response == 'Y'
+    if user_response == 'Y'
+      board_reset
+      play_game(player1, player2)
+    else
+      false
+    end
   end
 
   protected
